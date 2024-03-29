@@ -3,4 +3,4 @@ This discord bot can translate different words and sentences to different langua
 
 ***COMMANDS***
 
-***!translate <word/wrods to translate>***      ***<language translating to>***
+!translate <word/wrods to translate> <language translating to>
