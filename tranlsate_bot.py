@@ -22,11 +22,12 @@ class CustomClient(discord.Client):
                 print(message.content.split(), message.content.split()[1], message.content.split()[2])
                 await self.translate(message)
             except (IndexError, ValueError):
-                await message.channel.send(embed = discord.Embed(title = "WRONG STRUCTURE", description="The right way to write the command:"+"\n"+"**!translate <word or sentence> <language code>**", colour=discord.Colour.blue())
-                                            )
-                await message.channel.send(embed = discord.Embed(description = "*Here you can find all the language codes:*" + "\n",colour = discord.Colour.red()))#File where all the language codes are shown
-                await message.channel.send(file=discord.File("langs.txt"))                            
-                
+                await message.channel.send(embed = discord.Embed(title = "WRONG STRUCTURE", description="The right way to write the command:"+"\n"+"`!translate <word or sentence> <language code>`", colour=discord.Colour.blue()))
+                await self.show_list(message)
+        if message.content.startswith("!lang-list"):
+            await self.show_list(message)        
+        if message.content.startswith("!help"):
+            await self.help(message)
                 
     async def translate(self, message):
         result = message.content.split()
@@ -37,6 +38,10 @@ class CustomClient(discord.Client):
         print(lang, "\n", translate)
         word = translator.translate(translate, dest=lang.lower())
         await message.channel.send(embed=discord.Embed(description=translate + " (" + word.src + ") - " + word.text + " (" + word.dest + ")", colour=discord.Colour.orange()))
-
+    async def show_list(self, message):
+        await message.channel.send(embed = discord.Embed(description = "*You can find all the language codes below:*" + "\n",colour = discord.Colour.red()))#File where all the language codes are shown
+        await message.channel.send(file=discord.File("langs.txt"))
+    async def help(self, message):
+        await message.channel.send(embed = discord.Embed(title="***COMMANDS***", description="`!translate <word or sentence> <language code>`" + "\n" + "Translates a word or a sentence to a specific language" + "\n" + "`!lang-list`" + "\n" + "Shows all the language codes that are used in `!translate`", colour = discord.Colour.green()))                            
 client = CustomClient(intents=intents)
 client.run(TOKEN)#My discord bot's token is stored in a sepparate file
